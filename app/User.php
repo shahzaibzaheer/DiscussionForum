@@ -37,10 +37,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
+    public function replies(){
+        return $this->hasMany(Reply::class);
+    }
 
     public function channels(){
         return $this->hasMany(Channel::class);
     }
 
+    public function discussions(){
+        return $this->hasMany(Discussion::class);
+    }
 }

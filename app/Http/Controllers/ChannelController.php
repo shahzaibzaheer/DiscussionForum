@@ -37,6 +37,7 @@ class ChannelController extends Controller
         return view('channel.create');
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -51,7 +52,7 @@ class ChannelController extends Controller
           redirected to submitted form with old data and validation error
         */
         $this->validate($request,[
-            'title' => 'required'
+            'title' => 'required',
         ]);
 
 
@@ -60,13 +61,9 @@ class ChannelController extends Controller
             'slug' => Str::slug($request->input('title')),
         ]);
 
-//        Channel::create([
-//
-//        ]);
 
         session()->flash('success','New Channel Successfully Created');
         return redirect()->route('channel.index');
-//        dd($request->all());
     }
 
     /**
@@ -88,7 +85,8 @@ class ChannelController extends Controller
      */
     public function edit(Channel $channel)
     {
-        //
+        return view('channel.create')
+            ->with('channel',$channel);
     }
 
     /**
@@ -100,8 +98,35 @@ class ChannelController extends Controller
      */
     public function update(Request $request, Channel $channel)
     {
-        //
+        /* by this way of handling validation,
+          if data is not valid then request will be automatically
+          redirected to submitted form with old data and validation error
+        */
+        $this->validate($request,[
+            'title' => 'required',
+            'slug' => 'unique:channels',
+        ]);
+
+        $channel->update([
+            'title' => $request->input('title'),
+            'slug' => Str::slug($request->input('title')),
+        ]);
+
+        session()->flash('success', 'Channel Updated Successfully');
+        return redirect()->route('channel.index');
     }
+
+    /**
+     * Show the delete form
+     *
+     * @param  \App\Channel  $channel
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Channel $channel)
+    {
+        return view('channel.delete')->with('slug',$channel->slug);
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -111,6 +136,8 @@ class ChannelController extends Controller
      */
     public function destroy(Channel $channel)
     {
-        //
+        $channel->delete();
+        session()->flash('success',"Channel Deleted Successfully");
+        return redirect()->route('channel.index');
     }
 }

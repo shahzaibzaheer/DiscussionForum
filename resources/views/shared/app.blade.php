@@ -87,7 +87,7 @@
                         @if(Auth()->user()->isAdmin)
                             <a href="{{route('channel.create')}}" class="btn btn-primary">Create New Channel</a>
                         @endif
-                        <a href="" class="btn btn-primary  mt-2">Create New Discussion</a>
+                        <a href="{{route('discussion.create')}}" class="btn btn-primary  mt-2">Create New Discussion</a>
                         <div class="card mt-3 ">
                             <div class="list-group border-0">
                                 <a href="#" class="list-group-item  border-left-0 border-right-0">Home</a>
@@ -95,7 +95,7 @@
                                 @if(Auth()->user()->isAdmin)
                                     <a href="{{route('channel.index')}}" class="list-group-item  border-left-0 border-right-0">Channels</a>
                                 @endif
-                                <a href="#" class="list-group-item  border-left-0 border-right-0">My Discussions</a>
+                                <a href="{{route('discussion.userDiscussions')}}" class="list-group-item  border-left-0 border-right-0">My Discussions</a>
                                 <a href="#" class="list-group-item  border-left-0 border-right-0">Answered Discussions</a>
                                 <a href="#" class="list-group-item  border-left-0 border-right-0">Unanswered Discussions</a>
                             </div>
@@ -106,10 +106,12 @@
 
                         <div class="card-header bg-white ">Channels</div>
                         <div class="list-group border-0">
-                            <a href="#" class="list-group-item  border-left-0 border-right-0">Item 1</a>
-                            <a href="#" class="list-group-item  border-left-0 border-right-0">Item 2</a>
-                            <a href="#" class="list-group-item  border-left-0 border-right-0">Item 3</a>
-                            <a href="#" class="list-group-item  border-left-0 border-right-0">Item 4</a>
+                            @forelse($channels as $channel)
+                                {{-- TODO: Show all discussion that has same categoryes--}}
+                                <a href="#" class="list-group-item  border-left-0 border-right-0">{{ $channel->title }}</a>
+                            @empty
+                                <span class="list-group-item">No Channel Found</span>
+                            @endforelse
                         </div>
                     </div>
                 </div><!-- End of Left Side Bar -->
@@ -123,9 +125,6 @@
         </div>
     </main>
 </div>
-
-<button onclick="toastr.info('Hello')">Hellow</button>
-{{--<script src="{{asset('vendor/toastr/toastr.js')}}"></script>--}}
 
 <!-- Compiled and minified JavaScript -->
 <script src="{{ asset('js/app.js') }}" ></script>

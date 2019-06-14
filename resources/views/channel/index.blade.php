@@ -10,27 +10,30 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>Channel Title</td>
-            <td class="text-right ">
-                <a href="" class="btn btn-outline-dark btn-sm ml-2">Edit</a>
-                <a href="" class="btn btn-outline-dark btn-sm ml-2">Delete</a>
-            </td>
-        </tr>
-        <tr>
-            <td>Channel Title</td>
-            <td class="text-right ">
-                <a href="" class="btn btn-outline-dark btn-sm ml-2">Edit</a>
-                <a href="" class="btn btn-outline-dark btn-sm ml-2">Delete</a>
-            </td>
-        </tr>
-        <tr>
-            <td>Channel Title</td>
-            <td class="text-right ">
-                <a href="" class="btn btn-outline-dark btn-sm ml-2">Edit</a>
-                <a href="" class="btn btn-outline-dark btn-sm ml-2">Delete</a>
-            </td>
-        </tr>
+
+        @forelse($channels as $channel)
+            <tr>
+                <td>{{ $channel->title }}</td>
+                <td class="text-right ">
+                    <a href="{{route('channel.edit',[$channel->slug])}}" class="btn btn-outline-primary btn-sm ml-2">Edit</a>
+                    <a href="{{route('channel.delete',[$channel->slug])}}" class="btn btn-outline-danger btn-sm ml-2">Delete</a>
+                </td>
+            </tr>
+
+        @empty
+            <tr>
+                <td>No Channel Found</td>
+            </tr>
+        @endforelse
+
+{{--        <tr>--}}
+{{--            <td>Channel Title</td>--}}
+{{--            <td class="text-right ">--}}
+{{--                <a href="" class="btn btn-outline-dark btn-sm ml-2">Edit</a>--}}
+{{--                <a href="" class="btn btn-outline-dark btn-sm ml-2">Delete</a>--}}
+{{--            </td>--}}
+{{--        </tr>--}}
+
         </tbody>
     </table>
 @endSection
