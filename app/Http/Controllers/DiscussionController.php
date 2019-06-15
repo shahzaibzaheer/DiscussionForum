@@ -13,7 +13,7 @@ class DiscussionController extends Controller
 
     public function index(Request $request)
     {
-        $discussions = Discussion::paginate(4); // get all discussion
+        $discussions = Discussion::orderBy('created_at','DESC')->paginate(4); // get all discussion
         return view('discussion.index')->with('discussions',$discussions);
     }
 
@@ -124,6 +124,16 @@ class DiscussionController extends Controller
 
     public function destroy(Discussion $discussion)
     {
+        // delete everything related to discussion
+        // means, delete discussion, delete dissucsion replies, deleete replie likes
+
+            // deleting replies & likes
+            foreach ($discussion->replies as $reply){
+                $reply->likes()->delete();
+            }
+            $discussion->replies()->delete();
+
+        // now delete the discussion
         $discussion->delete();
         session()->flash('success','Discussion Successfully Deleted');
         return redirect()->route('discussion.userDiscussions');

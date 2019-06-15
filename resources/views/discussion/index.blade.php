@@ -27,7 +27,7 @@
             </div>
         </div> <!-- End of Discussion Item -->
     @empty
-        <h1>There is no Discussion</h1>
+        <h1>No Discussion Found</h1>
     @endforelse
 
         <div class="d-flex justify-content-center">

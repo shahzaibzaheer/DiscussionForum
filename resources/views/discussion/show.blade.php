@@ -41,7 +41,7 @@
                     @endif
                         <textarea class="p-2" name="content" id="" rows="5" style="width: 100%;"
                                   placeholder="Enter Your Replay" required></textarea>
-                    <input type="submit" value="Post Reply" class="btn btn-sm btn-primary">
+                    <input type="submit" value="Post Reply" class="mt-2 btn btn-sm btn-primary">
                 </div>
             </form>
 
@@ -62,7 +62,7 @@
                         </div>
                         <span class=" badge badge-success p-2" style="font-size: 1.1em">Best Replay!</span>
                         @auth
-                            @if($bestReply->user_id == Auth()->user()->id)
+                            @if($discussion->user->id == Auth()->user()->id)
                                 @if($bestReply->isBestReply)
                                     <form method="POST" action="{{route('discussion.reply.removeFromBest',['discussion'=>$discussion->id])}}">
                                         @csrf
@@ -109,7 +109,7 @@
                             <span class=" m-0 h6"> Reply by: <strong>{{$reply->user->name}}</strong>  </span>
                         </div>
                         @auth
-                            @if($reply->user_id == Auth()->user()->id)
+                            @if($discussion->user->id == Auth()->user()->id)
                                 @if($reply->isBestReply)
                                     <form method="POST" action="{{route('discussion.reply.removeFromBest',['discussion'=>$discussion->id])}}">
                                         @csrf

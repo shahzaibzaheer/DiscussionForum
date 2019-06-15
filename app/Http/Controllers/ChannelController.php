@@ -12,7 +12,7 @@ class ChannelController extends Controller
 
     public function __construct()
     {
-        $this->middleware('onlyAdmin');
+        $this->middleware('onlyAdmin')->except(['showDiscussions']);
     }
 
 
@@ -137,6 +137,18 @@ class ChannelController extends Controller
      */
     public function destroy(Channel $channel)
     {
+        // delete everything related to channel
+        // means, delete discussion, delete dissucsion replies, deleete replie likes
+        foreach ($channel->discussions as $discussion){
+            // deleting replies & likes
+            foreach ($discussion->replies as $reply){
+                $reply->likes()->delete();
+            }
+            $discussion->replies()->delete();
+
+            //delete disucssion
+            $channel->discussions()->delete();
+        }
         $channel->delete();
         session()->flash('success',"Channel Deleted Successfully");
         return redirect()->route('channel.index');

@@ -83,6 +83,11 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-3 d-flex flex-column"> <!-- Left Side Bar -->
+                    @guest
+                        <div class="card mt-3 ">
+                            <a href="{{route('discussion.index')}}" class="list-group-item  border-left-0 border-right-0">Home</a>
+                        </div>
+                    @endguest
                     @auth
                         @if(Auth()->user()->isAdmin)
                             <a href="{{route('channel.create')}}" class="btn btn-primary">Create New Channel</a>
@@ -91,18 +96,12 @@
                         <div class="card mt-3 ">
                             <div class="list-group border-0">
                                 <a href="{{route('discussion.index')}}" class="list-group-item  border-left-0 border-right-0">Home</a>
-                                <a href="#" class="list-group-item  border-left-0 border-right-0">Notifications  <span class="badge badge-success ml-2"> 2 unread </span> </a>
+{{--                                <a href="#" class="list-group-item  border-left-0 border-right-0">Notifications  <span class="badge badge-success ml-2"> 2 unread </span> </a>--}}
                                 @if(Auth()->user()->isAdmin)
                                     <a href="{{route('channel.index')}}" class="list-group-item  border-left-0 border-right-0">Channels</a>
                                 @endif
                                 <a href="{{route('discussion.userDiscussions')}}" class="list-group-item  border-left-0 border-right-0">My Discussions</a>
-                                <a href="#" class="list-group-item  border-left-0 border-right-0">Answered Discussions</a>
-                                <a href="#" class="list-group-item  border-left-0 border-right-0">Unanswered Discussions</a>
                             </div>
-                        </div>
-                    @elseauth
-                        <div class="card mt-3 ">
-                            <a href="{{route('discussion.index')}}" class="list-group-item  border-left-0 border-right-0">Home</a>
                         </div>
                     @endauth
 

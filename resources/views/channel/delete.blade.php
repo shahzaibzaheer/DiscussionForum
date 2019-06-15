@@ -3,6 +3,7 @@
     <div class="card mb-3">
         <div class="card-header text-center bg-white">
             <h3>Delete Channel ?</h3>
+            <h6>All posts in this channel will be deleted</h6>
         </div>
         <div class="card-body">
             <form action="{{route('channel.destroy',$slug)}}" method="POST">
