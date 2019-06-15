@@ -21,4 +21,8 @@ class Discussion extends Model
     public function replies(){
         return $this->hasMany(Reply::class);
     }
+
+    public function channel(){
+        return $this->belongsTo(Channel::class);
+    }
 }

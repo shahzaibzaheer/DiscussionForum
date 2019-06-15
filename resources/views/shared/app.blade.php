@@ -90,7 +90,7 @@
                         <a href="{{route('discussion.create')}}" class="btn btn-primary  mt-2">Create New Discussion</a>
                         <div class="card mt-3 ">
                             <div class="list-group border-0">
-                                <a href="#" class="list-group-item  border-left-0 border-right-0">Home</a>
+                                <a href="{{route('discussion.index')}}" class="list-group-item  border-left-0 border-right-0">Home</a>
                                 <a href="#" class="list-group-item  border-left-0 border-right-0">Notifications  <span class="badge badge-success ml-2"> 2 unread </span> </a>
                                 @if(Auth()->user()->isAdmin)
                                     <a href="{{route('channel.index')}}" class="list-group-item  border-left-0 border-right-0">Channels</a>
@@ -100,6 +100,10 @@
                                 <a href="#" class="list-group-item  border-left-0 border-right-0">Unanswered Discussions</a>
                             </div>
                         </div>
+                    @elseauth
+                        <div class="card mt-3 ">
+                            <a href="{{route('discussion.index')}}" class="list-group-item  border-left-0 border-right-0">Home</a>
+                        </div>
                     @endauth
 
                     <div class="card mt-3 " >
@@ -107,8 +111,7 @@
                         <div class="card-header bg-white ">Channels</div>
                         <div class="list-group border-0">
                             @forelse($channels as $channel)
-                                {{-- TODO: Show all discussion that has same categoryes--}}
-                                <a href="#" class="list-group-item  border-left-0 border-right-0">{{ $channel->title }}</a>
+                                <a href="{{route('channel.discussion.show',['channel'=>$channel->slug])}}" class="list-group-item  border-left-0 border-right-0">{{ $channel->title }}</a>
                             @empty
                                 <span class="list-group-item">No Channel Found</span>
                             @endforelse

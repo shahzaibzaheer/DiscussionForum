@@ -2,13 +2,12 @@
 @section('content')
     <div class="card mb-3">
         <div class="card-header text-center bg-white">
-
-                <h3>Create New Discussion</h3>
+            <h3>Update Discussion</h3>
         </div>
         <div class="card-body">
-                    <form action="{{route('discussion.store')}}" method="POST">
+            <form action="{{route('discussion.update',$discussion->slug)}}" method="POST">
+                <input type="hidden" name="_method" value="PUT">
                         @csrf
-
                         @if($errors->has('slug'))
                             <span class="text-danger">* {{ $errors->first('slug') }}</span>
                         @endif
@@ -18,7 +17,13 @@
                         <div class="form-group">
                             <label for="title">Discussion Title</label>
                             <input type="text" class="form-control" name="title" id="title" placeholder="Enter Discussion Title"
-                                        value="{{ old('title') }}"
+                                   @if($errors->has('title'))
+                                    value="{{ old('title') }}"
+                                   @else
+                                        @if(isset($discussion))
+                                            value="{{$discussion->title}}"
+                                        @endif
+                                   @endif
                             >
                         </div>
                         @if($errors->has('channel_id'))
@@ -32,9 +37,9 @@
                                     <option value="{{$channel->id}}"
                                     @if(isset($discussion) && $discussion->channel_id == $channel->id)
                                         {{ "selected" }}
-                                    @endif
+                                            @endif
                                     >{{$channel->title}}</option>
-                                    @empty
+                                @empty
                                     <option value="">No Channel Found</option>
                                 @endforelse
                             </select>
@@ -45,7 +50,13 @@
                         <div class="form-group">
                             <label for="content">Content</label>
                             @php
-                              $content = old('content');
+                                if($errors->has('content')){
+                                   $content = old('content');
+                                }else{
+                                    if(isset($discussion)){
+                                        $content = $discussion->content;
+                                    }
+                                }
                             @endphp
                             <textarea name="content" class="form-control" id="content" rows="7" placeholder="Enter Content" >@if(isset($content)){{$content}}@endif</textarea>
                         </div>
@@ -53,7 +64,7 @@
 
                         <button type="submit" class="btn btn-primary mt-3 float-right">
                             @if(isset($discussion)) {{-- mean Discussion is for update --}}
-                                Update
+                            Update
                             @else
                                 Create New Discussion
                             @endif

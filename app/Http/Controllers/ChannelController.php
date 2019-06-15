@@ -3,24 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Channel;
+use App\Discussion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ChannelController extends Controller
 {
-    /**
-     * ChannelController constructor.
-     */
+
     public function __construct()
     {
         $this->middleware('onlyAdmin');
     }
 
 
+    public function showDiscussions(Channel $channel){
+        $discussions = $channel->discussions()->paginate(4);
+//        $discussions = Discussion::paginate(4); // get all discussion
+        return view('discussion.index')->with('discussions',$discussions);
+    }
+
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -29,8 +32,6 @@ class ChannelController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {

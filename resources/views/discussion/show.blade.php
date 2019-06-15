@@ -25,7 +25,7 @@
                 <span class="ml-2 float-right font-weight-bold">{{$discussion->created_at->diffForHumans()}}</span>
             </div>
         </div><!-- End of Discussion Detail -->
-
+        @auth
         <!-- Reply Box-->
         <div class="card mb-3">
             <div class="card-header bg-white d-flex align-items-center justify-content-between">
@@ -46,7 +46,7 @@
             </form>
 
         </div><!-- End of Reply Box-->
-
+        @endauth
         <!-- Replies-->
         <div>
             <h2 class="display-5 text-center mt-5">Replies</h2>
@@ -61,8 +61,17 @@
                                 </span>
                         </div>
                         <span class=" badge badge-success p-2" style="font-size: 1.1em">Best Replay!</span>
-                        <a href="" class="btn btn-danger float-right btn-sm text-center">UnMark as Best
-                            Replay</a>
+                        @auth
+                            @if($bestReply->user_id == Auth()->user()->id)
+                                @if($bestReply->isBestReply)
+                                    <form method="POST" action="{{route('discussion.reply.removeFromBest',['discussion'=>$discussion->id])}}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="submit" class="btn btn-danger float-right btn-sm text-center" value="Remove From Best Replay"/>
+                                    </form>
+                                @endif
+                            @endif
+                        @endauth
                     </div>
                     <div class="card-body text-left">
                         <p class="card-text ">
@@ -72,7 +81,21 @@
                     </div>
                     <div class="card-footer">
                             <span class=" ">
-                                <a href="" class="mr-2 btn btn-sm btn-primary">Like</a> {{$bestReply->likes()->count()}} Likes
+                            @auth
+                                {{-- if reply is already liked by user then show unlike button, else show like btn  --}}
+                                @if($bestReply->likes()->where('user_id',Auth()->user()->id)->count() > 0)
+                                    <form method="POST" action="{{route('discussion.reply.unlike',['reply'=>$bestReply->id])}}">
+                                        @csrf
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="submit" class="mr-2 btn btn-sm btn-danger" value="Unlike"/>{{$bestReply->likes()->count()}} Likes
+                                     </form>
+                                @else
+                                    <form method="POST" action="{{route('discussion.reply.like',['reply'=>$bestReply->id])}}">
+                                        @csrf
+                                        <input type="submit" class="mr-2 btn btn-sm btn-primary" value="Like"/>{{$bestReply->likes()->count()}} Likes
+                                    </form>
+                                @endif
+                            @endauth
                              </span>
                         <span class="ml-2 float-right font-weight-bold">{{$bestReply->created_at->diffForHumans()}}</span></div>
                 </div> <!-- End of BEST Replay -->
@@ -85,8 +108,22 @@
                         <div class="d-flex align-items-center ">
                             <span class=" m-0 h6"> Reply by: <strong>{{$reply->user->name}}</strong>  </span>
                         </div>
-                        <a href="" class="btn btn-outline-success float-right btn-sm text-center">Mark as Best
-                            Replay</a>
+                        @auth
+                            @if($reply->user_id == Auth()->user()->id)
+                                @if($reply->isBestReply)
+                                    <form method="POST" action="{{route('discussion.reply.removeFromBest',['discussion'=>$discussion->id])}}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="submit" class="btn btn-danger float-right btn-sm text-center" value="Remove From Best Replay"/>
+                                    </form>
+                                @else
+                                    <form method="POST" action="{{route('discussion.reply.markAsBest',['discussion'=>$discussion->id,'reply'=>$reply->id])}}">
+                                        @csrf
+                                        <input type="submit" class="btn btn-outline-success float-right btn-sm text-center" value="Mark as Best Replay"/>
+                                    </form>
+                                @endif
+                            @endif
+                        @endauth
 
                     </div>
                     <div class="card-body text-left">
@@ -96,7 +133,22 @@
                     </div>
                     <div class="card-footer">
                             <span class=" ">
-                                <a href="" class="mr-2 btn btn-sm btn-primary">Like</a> {{$reply->likes()->count()}} Likes
+                                {{-- if reply is already liked by user then show unlike button, else show like btn  --}}
+                                @auth
+                                    @if($reply->likes()->where('user_id',Auth()->user()->id)->count() > 0)
+                                        <form method="POST" action="{{route('discussion.reply.unlike',['reply'=>$reply->id])}}">
+                                            @csrf
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <input type="submit" class="mr-2 btn btn-sm btn-danger" value="Unlike"/>{{$reply->likes()->count()}} Likes
+                                         </form>
+                                    @else
+                                        <form method="POST" action="{{route('discussion.reply.like',['reply'=>$reply->id])}}">
+                                            @csrf
+                                            <input type="submit" class="mr-2 btn btn-sm btn-primary" value="Like"/>{{$reply->likes()->count()}} Likes
+                                        </form>
+                                    @endif
+                                @endauth
+
                             </span>
                         <span class="ml-2 float-right font-weight-bold">{{$reply->created_at->diffForHumans()}}</span>
                     </div>
